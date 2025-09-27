@@ -140,6 +140,14 @@ cd FastQ-Screen
 nextflow run main.nf -profile conda --input '*.fastq.gz'
 ```
 
+## Development with GitHub Copilot
+
+This repository is configured for optimal GitHub Copilot experience. See [docs/COPILOT_GUIDE.md](docs/COPILOT_GUIDE.md) for:
+- Setup instructions for VS Code and Copilot
+- Best practices for bioinformatics workflow development
+- Code snippets for common Nextflow patterns
+- Tips for effective Copilot usage in computational biology
+
 ## Citation
 
 If you use this workflow, please cite both the original FastQ Screen publication and this Nextflow implementation:

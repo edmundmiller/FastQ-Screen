@@ -38,6 +38,11 @@ inc/
 .Rhistory
 .DS_Store
 
+# Include VS Code settings for development
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
 # Nextflow artifacts
 .nextflow/
 .nextflow.log*

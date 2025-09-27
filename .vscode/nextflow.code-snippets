@@ -1,0 +1,104 @@
+{
+    "Nextflow Process Template": {
+        "prefix": "nf-process",
+        "body": [
+            "process ${1:PROCESS_NAME} {",
+            "    tag \"\\$meta.id\"",
+            "    label 'process_${2:single}'",
+            "",
+            "    conda (params.enable_conda ? \"${3:bioconda::package}\" : null)",
+            "    container \"\\${ workflow.containerEngine == 'singularity' &&",
+            "                !task.ext.singularity_pull_docker_container ?",
+            "                'https://depot.galaxyproject.org/singularity/${4:container}' :",
+            "                'quay.io/biocontainers/${5:container}' }\"",
+            "",
+            "    input:",
+            "    tuple val(meta), path(${6:input_files})",
+            "",
+            "    output:",
+            "    tuple val(meta), path(\"*.${7:output_ext}\"), emit: ${8:output_name}",
+            "    path \"versions.yml\", emit: versions",
+            "",
+            "    when:",
+            "    task.ext.when == null || task.ext.when",
+            "",
+            "    script:",
+            "    def args = task.ext.args ?: ''",
+            "    def prefix = task.ext.prefix ?: \"\\${meta.id}\"",
+            "    \"\"\"",
+            "    ${9:command} \\\\",
+            "        $args \\\\",
+            "        ${10:input_files} \\\\",
+            "        > \\${prefix}.${7:output_ext}",
+            "",
+            "    cat <<-END_VERSIONS > versions.yml",
+            "    \"\\${task.process}\":",
+            "        ${11:tool}: \\$(${12:version_command})",
+            "    END_VERSIONS",
+            "    \"\"\"",
+            "}"
+        ],
+        "description": "Create a Nextflow process template for bioinformatics tools"
+    },
+    "Nextflow Workflow Template": {
+        "prefix": "nf-workflow",
+        "body": [
+            "workflow ${1:WORKFLOW_NAME} {",
+            "",
+            "    take:",
+            "    ${2:input_channel}",
+            "",
+            "    main:",
+            "    ch_versions = Channel.empty()",
+            "",
+            "    ${3:PROCESS_CALL} (",
+            "        ${2:input_channel}",
+            "    )",
+            "    ch_versions = ch_versions.mix(${3:PROCESS_CALL}.out.versions)",
+            "",
+            "    emit:",
+            "    ${4:output_name} = ${3:PROCESS_CALL}.out.${5:output_channel}",
+            "    versions = ch_versions",
+            "}"
+        ],
+        "description": "Create a Nextflow workflow template"
+    },
+    "FastQ Input Channel": {
+        "prefix": "nf-fastq-input",
+        "body": [
+            "Channel",
+            "    .fromPath(params.input)",
+            "    .map { fastq ->",
+            "        def meta = [:]",
+            "        meta.id = fastq.getBaseName().replaceAll(/\\.(fastq|fq)(\\.gz)?$/, '')",
+            "        meta.single_end = true",
+            "        return [meta, fastq]",
+            "    }"
+        ],
+        "description": "Create a channel for FASTQ input files with metadata"
+    },
+    "Paired-end FastQ Input Channel": {
+        "prefix": "nf-fastq-paired-input",
+        "body": [
+            "Channel",
+            "    .fromFilePairs(params.input, size: 2)",
+            "    .map { sample_id, reads ->",
+            "        def meta = [:]",
+            "        meta.id = sample_id",
+            "        meta.single_end = false",
+            "        return [meta, reads]",
+            "    }"
+        ],
+        "description": "Create a channel for paired-end FASTQ input files"
+    },
+    "Version Collection": {
+        "prefix": "nf-versions",
+        "body": [
+            "cat <<-END_VERSIONS > versions.yml",
+            "\"\\${task.process}\":",
+            "    ${1:tool}: \\$(${2:version_command} 2>&1 | ${3:grep_pattern})",
+            "END_VERSIONS"
+        ],
+        "description": "Template for collecting software versions"
+    }
+}

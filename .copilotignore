@@ -1,0 +1,65 @@
+# GitHub Copilot ignore file for FastQ-Screen
+# Exclude files that don't need AI suggestions
+
+# Binary files and assets
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ttf
+*.woff
+*.woff2
+FastQ_Screen_Logo.png
+OpenSans-Regular.ttf
+
+# Large data files and test data
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.fa
+*.fasta
+*.sam
+*.bam
+
+# Generated files and outputs
+results/
+work/
+.nextflow/
+.nextflow.log*
+*.html
+fastq_screen_summary_template.html
+interactive_graphs.js
+
+# Configuration and data directories
+download_genomes/
+FastQ_Screen_Genomes*/
+
+# Build artifacts and dependencies
+node_modules/
+.npm/
+dist/
+build/
+
+# IDE and editor files
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# System files
+.DS_Store
+Thumbs.db
+
+# License and legal files (usually don't need AI modification)
+license.txt
+LICENSE
+COPYING
+
+# Large JavaScript libraries (already complete)
+interactive_graphs.js
+
+# Test configuration files (specific to testing environment)
+fastq_screen_test.conf

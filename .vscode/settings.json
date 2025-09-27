@@ -1,0 +1,58 @@
+{
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": true,
+        "nextflow": true,
+        "perl": true,
+        "javascript": true,
+        "json": true,
+        "yaml": true
+    },
+    "github.copilot.chat.localeOverride": "en",
+    "github.copilot.editor.enableAutoCompletions": true,
+    "github.copilot.advanced": {
+        "length": 1000,
+        "temperature": "",
+        "top_p": "",
+        "stops": {
+            "*": ["\n\n\n"]
+        },
+        "indentationMode": {
+            "python": "indent",
+            "javascript": "indent",
+            "nextflow": "indent",
+            "perl": "indent"
+        }
+    },
+    "files.associations": {
+        "*.nf": "nextflow",
+        "*.config": "nextflow",
+        "nextflow.config": "nextflow",
+        "*.conf": "properties"
+    },
+    "extensions.recommendations": [
+        "github.copilot",
+        "github.copilot-chat",
+        "nextflow.nextflow",
+        "ms-perl.perl"
+    ],
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/*.code-search": true,
+        "**/results": true,
+        "**/work": true,
+        "**/.nextflow": true,
+        "**/download_genomes": true,
+        "**/*.fastq": true,
+        "**/*.fastq.gz": true,
+        "**/*.fq": true,
+        "**/*.fq.gz": true
+    },
+    "files.exclude": {
+        "**/results": true,
+        "**/work": true,
+        "**/.nextflow": true
+    }
+}

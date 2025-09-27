@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "github.copilot",
+        "github.copilot-chat",
+        "nextflow.nextflow",
+        "ms-perl.perl",
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-vscode.powershell",
+        "ms-python.python"
+    ],
+    "unwantedRecommendations": []
+}
