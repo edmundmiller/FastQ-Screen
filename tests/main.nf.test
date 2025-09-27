@@ -1,0 +1,36 @@
+nextflow_pipeline {
+
+    name "Test complete pipeline"
+    script "../main.nf"
+
+    test("Should show help and error message") {
+
+        when {
+            params {
+                help = true
+            }
+        }
+
+        then {
+            assert workflow.success == false  // help exits with code 1
+            assert workflow.stdout.join(' ').contains("No input files specified")
+        }
+
+    }
+
+    test("Should fail gracefully without input") {
+
+        when {
+            params {
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success == false
+            assert workflow.stdout.join(' ').contains("No input files specified")
+        }
+
+    }
+
+}

@@ -1,64 +1,80 @@
-# This is a basic workflow to test FastQ Screen is working
-
 name: CI
 
-# Controls when the action will run. Triggers the workflow on push or pull request
 on:
   push:
-    branches: [ master ]
+    branches: [ master, main ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, main ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  # Test with nf-test
+  test:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    strategy:
+      matrix:
+        NXF_VER:
+          - "23.04.0"
+          - "latest-stable"
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+      - name: Check out pipeline code
+        uses: actions/checkout@v4
 
-    # Runs a single command using the runners shell
-    - name: Run a one-line script
-      run: echo Hello, world!
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-    # Runs a set of commands using the runners shell
-    - name: Install dependencies
-      run: |
-        sudo apt install bowtie2
-        sudo apt-get install libgd-perl
-        sudo cpan App::cpanminus
-        sudo cpanm GD::Graph
+      - name: Install Nextflow
+        uses: nf-core/setup-nextflow@v2
+        with:
+          version: "${{ matrix.NXF_VER }}"
+
+      - name: Install nf-test
+        uses: nf-core/setup-nf-test@v1
+        with:
+          version: "0.8.4"
+
+      - name: Run nf-test
+        run: |
+          nf-test test --verbose
+
+  # Test legacy pipeline (preserve original functionality)
+  legacy-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pipeline code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Nextflow
+        uses: nf-core/setup-nextflow@v2
+        with:
+          version: "latest-stable"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bowtie2 libgd-perl
+          sudo cpan App::cpanminus
+          sudo cpanm GD::Graph
              
-    # Download and extract useful files
-    - name: Download files
-      run: |
-        wget https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/fastq_screen_test_dataset.tar.gz
-        tar xvzf fastq_screen_test_dataset.tar.gz
-        ln -s fastq_screen_test_dataset/*.fastq.gz .
-        $GITHUB_WORKSPACE/fastq_screen --get_genomes
+      - name: Download test files
+        run: |
+          wget https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/fastq_screen_test_dataset.tar.gz
+          tar xvzf fastq_screen_test_dataset.tar.gz
+          ln -s fastq_screen_test_dataset/*.fastq.gz .
+          $GITHUB_WORKSPACE/fastq_screen --get_genomes
         
-    # Run FastQ Screen
-    - name: Run FastQ Screen
-      run: |
-        $GITHUB_WORKSPACE/fastq_screen --conf ./FastQ_Screen_Genomes/fastq_screen.conf *.fastq.gz
-           
-    #Check Bisulfite mode
-    - name: Check Bisulphite mode
-      run: |
-        wget https://www.bioinformatics.babraham.ac.uk/projects/bismark/test_data.fastq
-        wget https://github.com/FelixKrueger/Bismark/archive/0.22.3.tar.gz
-        tar xvzf 0.22.3.tar.gz
-        Bismark-0.22.3/bismark --help
-        export PATH="~/Bismark-0.22.3:$PATH"
-        source ~/.bashrc
-              
-       # $GITHUB_WORKSPACE/fastq_screen --get_genomes --bisulfite  #Took too much memory or too long (perhaps use fewer genomes)
-        
-    # Run FastQ Screen
-    - name: Run FastQ Screen
-      run: |
-        #$GITHUB_WORKSPACE/fastq_screen --conf ./FastQ_Screen_Genomes_Bisulfite/fastq_screen.conf --bisulfite *.fastq.gz
+      - name: Run FastQ Screen (classic)
+        run: |
+          $GITHUB_WORKSPACE/fastq_screen --conf ./FastQ_Screen_Genomes/fastq_screen.conf *.fastq.gz
+
+      - name: Run Nextflow pipeline test
+        run: |
+          nextflow run . -profile test --outdir ./results
