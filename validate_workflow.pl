@@ -15,8 +15,7 @@ my @nf_files = (
     'modules/fastq_screen_screen.nf',
     'modules/make_graphs.nf',
     'modules/make_html_report.nf',
-    'modules/subset_fastq.nf',
-    'modules/filter_reads.nf'
+    'modules/subset_fastq.nf'
 );
 
 my @config_files = (

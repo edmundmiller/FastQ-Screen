@@ -1,10 +1,10 @@
 # FastQ-Screen Nextflow Workflow
 
-A Nextflow implementation of FastQ Screen - a tool for multi-genome mapping and quality control.
+A modern Nextflow implementation of FastQ Screen - a tool for multi-genome mapping and quality control.
 
 ## Overview
 
-This workflow replaces the original Perl "glue" code with Nextflow while maintaining 100% compatibility with the original FastQ Screen functionality. The core screening logic continues to use the proven Perl implementation, but workflow orchestration, parallelization, and resource management are now handled by Nextflow.
+This workflow provides a Nextflow implementation of FastQ Screen with improved parallelization, resource management, and reproducibility. It leverages container technology and modern workflow management for scalable bioinformatics analysis.
 
 ## Quick Start
 
@@ -16,7 +16,7 @@ nextflow run main.nf --input '*.fastq.gz'
 nextflow run main.nf --input 'sample.fastq.gz' --conf custom.conf --aligner bowtie2 --threads 8
 
 # Run with subsetting for quick analysis
-nextflow run main.nf --input '*.fastq.gz' --subset 10000 --get_genomes
+nextflow run main.nf --input '*.fastq.gz' --subset 10000
 
 # Run with filtering
 nextflow run main.nf --input 'sample.fastq.gz' --tag --filter '0010' --outdir results/
@@ -96,7 +96,7 @@ The workflow produces the same output files as the original FastQ Screen:
 
 ### Key Design Decisions
 
-1. **Compatibility First**: The core screening functionality continues to use the original Perl script, ensuring 100% compatibility
+1. **Container-First**: Uses the official fastq-screen bioconda package for reproducible execution
 2. **Modular Design**: Different aspects (subsetting, screening, graphing, reporting) are separated into distinct processes
 3. **Resource Optimization**: Nextflow handles parallelization and resource allocation efficiently
 4. **Reproducibility**: Container support and environment management ensure consistent results
@@ -107,7 +107,7 @@ The workflow produces the same output files as the original FastQ Screen:
 main.nf                          # Entry point
 ├── workflows/fastq_screen.nf    # Main workflow logic
 ├── modules/                     # Process definitions
-│   ├── fastq_screen_screen.nf   # Core screening (wraps Perl script)
+│   ├── fastq_screen_screen.nf   # Core screening using fastq-screen package
 │   ├── subset_fastq.nf          # FASTQ subsetting with seqtk
 │   ├── make_graphs.nf           # Graph generation  
 │   ├── make_html_report.nf      # HTML report creation
@@ -116,24 +116,11 @@ main.nf                          # Entry point
 └── lib/                         # Library functions
 ```
 
-## Migration from Perl Version
-
-The Nextflow version maintains complete command-line compatibility:
-
-```bash
-# Original Perl command
-fastq_screen --conf config.txt --aligner bowtie2 --threads 8 sample.fastq.gz
-
-# Equivalent Nextflow command  
-nextflow run main.nf --input sample.fastq.gz --conf config.txt --aligner bowtie2 --threads 8
-```
-
 ## Requirements
 
 - Nextflow >= 23.04.0
 - One of the supported aligners: Bowtie, Bowtie2, BWA, or minimap2
-- Perl 5.26+ (for core screening functionality)
-- Optional: GD::Graph Perl module (for PNG graph generation)
+- Container engine (Docker, Singularity) or Conda
 
 ## Installation
 
@@ -150,7 +137,7 @@ cd FastQ-Screen
 
 3. Run with your preferred profile:
 ```bash
-nextflow run main.nf -profile conda --input '*.fastq.gz' --get_genomes
+nextflow run main.nf -profile conda --input '*.fastq.gz'
 ```
 
 ## Citation

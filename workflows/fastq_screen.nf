@@ -13,7 +13,6 @@ include { FASTQ_SCREEN_SCREEN                  } from '../modules/fastq_screen_s
 include { MAKE_GRAPHS                          } from '../modules/make_graphs' 
 include { MAKE_HTML_REPORT                     } from '../modules/make_html_report'
 include { SUBSET_FASTQ                         } from '../modules/subset_fastq'
-include { FILTER_READS                         } from '../modules/filter_reads'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -107,7 +106,10 @@ workflow FASTQ_SCREEN {
         params.bowtie2_opts ?: '',
         params.bismark_opts ?: '',
         params.bwa_opts ?: '',
-        params.minimap2_opts ?: ''
+        params.minimap2_opts ?: '',
+        params.filter ?: '',
+        params.pass ?: 0,
+        params.inverse ?: false
     )
     ch_versions = ch_versions.mix(FASTQ_SCREEN_SCREEN.out.versions)
 
@@ -130,23 +132,14 @@ workflow FASTQ_SCREEN {
     ch_versions = ch_versions.mix(MAKE_HTML_REPORT.out.versions)
 
     //
-    // MODULE: Filter reads if requested
+    // MODULE: Filter reads if requested - handled by main fastq-screen process
     //
-    if (params.filter) {
-        FILTER_READS (
-            FASTQ_SCREEN_SCREEN.out.tagged.ifEmpty([]),
-            params.filter,
-            params.pass ?: 1,
-            params.inverse ?: false
-        )
-        ch_versions = ch_versions.mix(FILTER_READS.out.versions)
-    }
 
     emit:
     results      = FASTQ_SCREEN_SCREEN.out.results
     html         = MAKE_HTML_REPORT.out.html
     png          = MAKE_GRAPHS.out.png
-    filtered     = params.filter ? FILTER_READS.out.filtered : Channel.empty()
+    filtered     = FASTQ_SCREEN_SCREEN.out.filtered
     versions     = ch_versions
 }
 

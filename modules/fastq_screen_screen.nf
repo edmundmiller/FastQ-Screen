@@ -22,12 +22,16 @@ process FASTQ_SCREEN_SCREEN {
     val bismark_opts
     val bwa_opts
     val minimap2_opts
+    val filter
+    val pass
+    val inverse
 
     output:
     tuple val(meta), path("*.txt")    , emit: results
     tuple val(meta), path("*.png"), optional: true, emit: png
     tuple val(meta), path("*.html"), optional: true, emit: html
     tuple val(meta), path("*.tagged.fastq*"), optional: true, emit: tagged
+    tuple val(meta), path("*_filter.fastq*"), optional: true, emit: filtered
     path "versions.yml", emit: versions
 
     when:
@@ -54,17 +58,13 @@ process FASTQ_SCREEN_SCREEN {
     def bismark_opts_arg = bismark_opts ? "--bismark '${bismark_opts}'" : ""
     def bwa_opts_arg = bwa_opts ? "--bwa '${bwa_opts}'" : ""
     def minimap2_opts_arg = minimap2_opts ? "--minimap2 '${minimap2_opts}'" : ""
+    def filter_arg = filter ? "--filter '${filter}'" : ""
+    def pass_arg = (pass && pass > 0) ? "--pass ${pass}" : ""
+    def inverse_arg = inverse ? "--inverse" : ""
 
     """
-    # Copy the original Perl script temporarily to use its core functionality
-    # This is the minimal approach - we're using the Perl script as the engine
-    # but wrapping it in Nextflow for workflow management
-    
-    cp ${projectDir}/fastq_screen ./fastq_screen_temp
-    chmod +x ./fastq_screen_temp
-    
-    # Run FastQ Screen with all parameters
-    ./fastq_screen_temp \\
+    # Use FastQ Screen directly from the container
+    fastq_screen \\
         --conf ${config} \\
         ${aligner_arg} \\
         ${threads_arg} \\
@@ -81,13 +81,15 @@ process FASTQ_SCREEN_SCREEN {
         ${bismark_opts_arg} \\
         ${bwa_opts_arg} \\
         ${minimap2_opts_arg} \\
+        ${filter_arg} \\
+        ${pass_arg} \\
+        ${inverse_arg} \\
         ${args} \\
         ${reads}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        fastq_screen: \$(./fastq_screen_temp --version 2>&1 | grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+' | head -1)
-        perl: \$(perl --version | grep -oE 'v[0-9]+\\.[0-9]+\\.[0-9]+' | head -1)
+        fastq_screen: \$(fastq_screen --version 2>&1 | grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+' | head -1)
     END_VERSIONS
     """
 
@@ -98,11 +100,11 @@ process FASTQ_SCREEN_SCREEN {
     touch ${prefix}_screen.png
     touch ${prefix}_screen.html
     touch ${prefix}.tagged.fastq
+    touch ${prefix}_filter.fastq
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         fastq_screen: 0.16.0
-        perl: v5.32.1
     END_VERSIONS
     """
 }
