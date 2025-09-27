@@ -28,53 +28,13 @@ nextflow.enable.dsl = 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// Help message
-if (params.help) {
-    // Print help text
-    def help_text = """
-FastQ Screen Nextflow Pipeline
+include { validateParameters; paramsSummaryLog } from 'plugin/nf-schema'
 
-Usage:
-    nextflow run main.nf --input '*.fastq.gz' [options]
+// Validate input parameters
+validateParameters()
 
-Input/output options:
-    --input                 Path to FASTQ files (can use glob patterns)
-    --outdir                The output directory where results will be saved [default: ./results]
-
-FastQ Screen options:
-    --conf                  Path to FastQ Screen configuration file
-    --subset                Process only a subset of reads for faster analysis
-    --aligner               Alignment tool to use [default: bowtie2]
-    --threads               Number of threads to use [default: 4]
-    --bisulfite             Enable bisulfite mode
-    --paired                Treat input as paired-end reads
-    --tag                   Add genome tags to read headers
-    --nohits                Output reads that didn't map to any genome
-    --illumina1_3           Use Illumina 1.3+ quality encoding
-    --filter                Filter reads based on mapping results
-    --pass                  Minimum mapping quality threshold
-    --inverse               Invert the filter selection
-    --top                   Process only the top portion of reads
-    --get_genomes           Download default genome databases
-
-Generic options:
-    --help                  Display this help message
-    --version               Display version and exit
-"""
-    println help_text
-    exit 0
-}
-
-// Version message
-if (params.version) {
-    println "FastQ Screen Nextflow Pipeline version ${workflow.manifest.version ?: '0.16.0'}"
-    exit 0
-}
-
-// Basic parameter validation
-if (!params.input) {
-    error "No input files specified. Use --input to specify FASTQ files."
-}
+// Print summary of supplied parameters
+log.info paramsSummaryLog(workflow)
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -105,31 +65,32 @@ workflow EDMUNDMILLER_FASTQSCREEN {
     //
     ch_fastq = Channel.empty()
     
-    if (params.input) {
-        if (params.input.endsWith('.tar.gz')) {
-            // Handle test dataset or compressed input
-            Channel.fromPath(params.input)
-                .set { ch_input }
-            
-            ch_input
-                .map { file -> 
-                    def extracted = file.toString().replace('.tar.gz', '_extracted')
-                    [file, extracted]
-                }
-                .set { ch_fastq }
-        } else if (params.input.contains('*') || params.input.contains('?')) {
-            // Handle glob patterns
-            Channel.fromPath(params.input, checkIfExists: true)
-                .map { file -> [[id: file.baseName], file] }
-                .set { ch_fastq }
-        } else {
-            // Handle single file or directory
-            Channel.fromPath(params.input, checkIfExists: true)
-                .map { file -> [[id: file.baseName], file] }
-                .set { ch_fastq }
-        }
-    } else {
+    // Skip input processing if params.input is null (e.g., when showing help)
+    if (params.input == null) {
         error "No input files specified. Use --input to specify FASTQ files."
+    }
+    
+    if (params.input.endsWith('.tar.gz')) {
+        // Handle test dataset or compressed input
+        Channel.fromPath(params.input)
+            .set { ch_input }
+        
+        ch_input
+            .map { file -> 
+                def extracted = file.toString().replace('.tar.gz', '_extracted')
+                [file, extracted]
+            }
+            .set { ch_fastq }
+    } else if (params.input.contains('*') || params.input.contains('?')) {
+        // Handle glob patterns
+        Channel.fromPath(params.input, checkIfExists: true)
+            .map { file -> [[id: file.baseName], file] }
+            .set { ch_fastq }
+    } else {
+        // Handle single file or directory
+        Channel.fromPath(params.input, checkIfExists: true)
+            .map { file -> [[id: file.baseName], file] }
+            .set { ch_fastq }
     }
 
     //
