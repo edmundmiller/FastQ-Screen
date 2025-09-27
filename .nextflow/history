@@ -1,7 +1,0 @@
-2025-09-27 11:12:44	-	prickly_williams	-	f3448ceb069546939ee33ee0b2a6a3a9	c8d2a6f4-41b0-4ca7-b688-db95409aa3e0	nextflow run main.nf --help
-2025-09-27 11:13:14	-	peaceful_brattain	-	d16673aa202ff8f1f5df977a60c0df15	64be5ed3-7339-4258-b5cb-eba61c656853	nextflow run main.nf --help
-2025-09-27 11:13:25	-	gloomy_church	-	d16673aa202ff8f1f5df977a60c0df15	cad165e2-10a2-4f40-a6a5-ebc79d2170d2	nextflow run main.nf --version
-2025-09-27 11:13:44	-	fervent_mercator	-	c7ccc752e8226a5551786d75aed8244a	6cbafbe9-6d8b-4547-ad61-b2a6fee48aed	nextflow run main.nf --version
-2025-09-27 11:13:56	-	clever_kirch	-	c7ccc752e8226a5551786d75aed8244a	0cc031d4-6b97-425c-936a-4e6e8be0805b	nextflow run main.nf
-2025-09-27 11:14:17	-	spontaneous_mercator	-	c7ccc752e8226a5551786d75aed8244a	619a0cb2-7147-4a19-9179-c335240d7ff0	nextflow run main.nf --input test.fastq
-2025-09-27 11:14:44	3.1s	lethal_wegener	ERR	c7ccc752e8226a5551786d75aed8244a	4cdc752b-6eb8-491b-a085-2ccf99bd8cae	nextflow run main.nf --input test.fastq
