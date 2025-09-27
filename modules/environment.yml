@@ -1,0 +1,13 @@
+name: fastq_screen_screen
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - fastq-screen=0.15.3
+  - bowtie2=2.4.5
+  - bowtie=1.3.1
+  - bwa=0.7.17
+  - minimap2=2.24
+  - samtools=1.16.1
+  - bismark=0.24.0
