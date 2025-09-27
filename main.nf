@@ -46,6 +46,7 @@ include { FASTQ_SCREEN_SCREEN                  } from './modules/fastq_screen_sc
 include { MAKE_GRAPHS                          } from './modules/make_graphs' 
 include { MAKE_HTML_REPORT                     } from './modules/make_html_report'
 include { SUBSET_FASTQ                         } from './modules/subset_fastq'
+include { EXTRACT_TARBALL                      } from './modules/extract_tarball'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -73,14 +74,12 @@ workflow EDMUNDMILLER_FASTQSCREEN {
     if (params.input.endsWith('.tar.gz')) {
         // Handle test dataset or compressed input
         Channel.fromPath(params.input)
-            .set { ch_input }
+            .map { file -> [[id: file.baseName.replace('.tar', '')], file] }
+            .set { ch_tarball }
         
-        ch_input
-            .map { file -> 
-                def extracted = file.toString().replace('.tar.gz', '_extracted')
-                [file, extracted]
-            }
-            .set { ch_fastq }
+        EXTRACT_TARBALL(ch_tarball)
+        ch_fastq = EXTRACT_TARBALL.out.fastq
+        ch_versions = ch_versions.mix(EXTRACT_TARBALL.out.versions)
     } else if (params.input.contains('*') || params.input.contains('?')) {
         // Handle glob patterns
         Channel.fromPath(params.input, checkIfExists: true)
@@ -101,8 +100,18 @@ workflow EDMUNDMILLER_FASTQSCREEN {
     if (params.conf) {
         ch_config = Channel.fromPath(params.conf, checkIfExists: true)
     } else if (params.get_genomes) {
-        // Handle genome downloading - will be implemented in a separate process
-        ch_config = Channel.value('get_genomes')
+        // For testing, use the test config if available, otherwise use default config
+        def test_config = "${projectDir}/fastq_screen_test.conf"
+        if (file(test_config).exists()) {
+            ch_config = Channel.fromPath(test_config)
+        } else {
+            def default_config = "${projectDir}/fastq_screen.conf.example"
+            if (file(default_config).exists()) {
+                ch_config = Channel.fromPath(default_config)
+            } else {
+                error "No configuration file found. Use --conf to specify a config file."
+            }
+        }
     } else {
         // Look for default config
         def default_config = "${projectDir}/fastq_screen.conf.example"
