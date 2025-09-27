@@ -1,0 +1,193 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/edmundmiller/FastQ-Screen/master/nextflow_schema.json",
+    "title": "edmundmiller/fastq-screen pipeline parameters",
+    "description": "A tool for multi-genome mapping and quality control",
+    "type": "object",
+    "properties": {
+        "input": {
+            "type": "string",
+            "description": "Path to FASTQ files (can use glob patterns like '*.fastq.gz')",
+            "help_text": "Use this to specify the location of your input FASTQ files. For example: --input '*.fastq.gz'",
+            "fa_icon": "fas fa-file-alt"
+        },
+        "outdir": {
+            "type": "string",
+            "description": "The output directory where the results will be saved.",
+            "default": "./results",
+            "fa_icon": "fas fa-folder-open"
+        },
+        "conf": {
+            "type": ["string", "null"],
+            "description": "Path to FastQ Screen configuration file",
+            "help_text": "Configuration file containing database paths and aligner settings",
+            "fa_icon": "fas fa-file-code"
+        },
+        "subset": {
+            "type": ["integer", "null"],
+            "minimum": 1,
+            "description": "Process only a subset of reads for faster analysis",
+            "help_text": "Specify the number of reads to process from each FASTQ file",
+            "fa_icon": "fas fa-cut"
+        },
+        "aligner": {
+            "type": "string",
+            "enum": ["bowtie", "bowtie2", "bwa", "minimap2"],
+            "default": "bowtie2",
+            "description": "Alignment tool to use for mapping",
+            "help_text": "Choose the alignment tool for mapping reads to reference genomes",
+            "fa_icon": "fas fa-wrench"
+        },
+        "threads": {
+            "type": ["integer", "null"],
+            "minimum": 1,
+            "default": 4,
+            "description": "Number of threads to use for alignment",
+            "help_text": "Number of CPU threads to use for the alignment step",
+            "fa_icon": "fas fa-microchip"
+        },
+        "bisulfite": {
+            "type": "boolean",
+            "default": false,
+            "description": "Enable bisulfite mode for methylation analysis",
+            "help_text": "Use bisulfite-specific alignment settings",
+            "fa_icon": "fas fa-dna"
+        },
+        "paired": {
+            "type": "boolean",
+            "default": false,
+            "description": "Treat input as paired-end reads",
+            "help_text": "Enable paired-end read processing",
+            "fa_icon": "fas fa-link"
+        },
+        "tag": {
+            "type": "boolean",
+            "default": false,
+            "description": "Add genome tags to read headers",
+            "help_text": "Tag reads with their mapping genome in the output",
+            "fa_icon": "fas fa-tags"
+        },
+        "nohits": {
+            "type": "boolean",
+            "default": false,
+            "description": "Output reads that didn't map to any genome",
+            "help_text": "Include unmapped reads in the output",
+            "fa_icon": "fas fa-times-circle"
+        },
+        "illumina1_3": {
+            "type": "boolean",
+            "default": false,
+            "description": "Use Illumina 1.3+ quality encoding",
+            "help_text": "Enable for older Illumina quality score format",
+            "fa_icon": "fas fa-microscope"
+        },
+        "filter": {
+            "type": ["string", "null"],
+            "pattern": "^[012345-]*$",
+            "description": "Filter reads based on mapping results",
+            "help_text": "Filter string using digits 0-5 and hyphens to specify which reads to output",
+            "fa_icon": "fas fa-filter"
+        },
+        "pass": {
+            "type": ["integer", "null"],
+            "minimum": 0,
+            "description": "Minimum mapping quality threshold",
+            "help_text": "Only output reads with mapping quality above this threshold",
+            "fa_icon": "fas fa-check-circle"
+        },
+        "inverse": {
+            "type": "boolean",
+            "default": false,
+            "description": "Invert the filter selection",
+            "help_text": "Output reads that don't match the filter criteria",
+            "fa_icon": "fas fa-exchange-alt"
+        },
+        "top": {
+            "type": ["string", "null"],
+            "description": "Process only the top portion of reads",
+            "help_text": "Process only the first N reads or percentage of reads",
+            "fa_icon": "fas fa-arrow-up"
+        },
+        "get_genomes": {
+            "type": "boolean",
+            "default": false,
+            "description": "Download default genome databases",
+            "help_text": "Automatically download and configure standard genome databases",
+            "fa_icon": "fas fa-download"
+        },
+        "add_genome": {
+            "type": ["string", "null"],
+            "description": "Add a custom genome to the analysis",
+            "help_text": "Path to custom genome for inclusion in the screening",
+            "fa_icon": "fas fa-plus"
+        },
+        "bowtie_opts": {
+            "type": ["string", "null"],
+            "description": "Additional options for Bowtie aligner",
+            "help_text": "Extra command line options to pass to Bowtie",
+            "fa_icon": "fas fa-terminal"
+        },
+        "bowtie2_opts": {
+            "type": ["string", "null"],
+            "description": "Additional options for Bowtie2 aligner",
+            "help_text": "Extra command line options to pass to Bowtie2",
+            "fa_icon": "fas fa-terminal"
+        },
+        "bismark_opts": {
+            "type": ["string", "null"],
+            "description": "Additional options for Bismark aligner",
+            "help_text": "Extra command line options to pass to Bismark",
+            "fa_icon": "fas fa-terminal"
+        },
+        "bwa_opts": {
+            "type": ["string", "null"],
+            "description": "Additional options for BWA aligner",
+            "help_text": "Extra command line options to pass to BWA",
+            "fa_icon": "fas fa-terminal"
+        },
+        "minimap2_opts": {
+            "type": ["string", "null"],
+            "description": "Additional options for minimap2 aligner",
+            "help_text": "Extra command line options to pass to minimap2",
+            "fa_icon": "fas fa-terminal"
+        },
+        "help": {
+            "type": "boolean",
+            "description": "Display help text.",
+            "fa_icon": "fas fa-question-circle",
+            "hidden": true
+        },
+        "version": {
+            "type": "boolean",
+            "description": "Display version and exit.",
+            "fa_icon": "fas fa-question-circle",
+            "hidden": true
+        },
+        "max_cpus": {
+            "type": "integer",
+            "description": "Maximum number of CPUs that can be requested for any single job.",
+            "default": 16,
+            "fa_icon": "fas fa-microchip",
+            "hidden": true,
+            "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
+        },
+        "max_memory": {
+            "type": "string",
+            "description": "Maximum amount of memory that can be requested for any single job.",
+            "default": "128.GB",
+            "fa_icon": "fas fa-memory",
+            "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
+            "hidden": true,
+            "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
+        },
+        "max_time": {
+            "type": "string",
+            "description": "Maximum amount of time that can be requested for any single job.",
+            "default": "240.h",
+            "fa_icon": "far fa-clock",
+            "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
+            "hidden": true,
+            "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
+        }
+    }
+}

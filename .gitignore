@@ -37,3 +37,10 @@ inc/
 # Additionals (not necessarily Perl-related)
 .Rhistory
 .DS_Store
+
+# Nextflow artifacts
+.nextflow/
+.nextflow.log*
+work/
+results/
+nextflow
