@@ -1,0 +1,45 @@
+Sep-27 11:13:42.871 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf --version
+Sep-27 11:13:42.978 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 25.04.7
+Sep-27 11:13:43.007 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/home/runner/.nextflow/plugins; core-plugins: nf-amazon@2.15.0-patch1,nf-azure@1.16.0-patch1,nf-cloudcache@0.4.3,nf-codecommit@0.2.3,nf-console@1.2.1,nf-google@1.21.1,nf-k8s@1.0.0,nf-tower@1.11.4-patch1,nf-wave@1.12.1
+Sep-27 11:13:43.035 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Sep-27 11:13:43.036 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Sep-27 11:13:43.040 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
+Sep-27 11:13:43.055 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Sep-27 11:13:43.086 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /home/runner/work/FastQ-Screen/FastQ-Screen/nextflow.config
+Sep-27 11:13:43.091 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/runner/work/FastQ-Screen/FastQ-Screen/nextflow.config
+Sep-27 11:13:43.133 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /home/runner/.nextflow/secrets/store.json
+Sep-27 11:13:43.138 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@22101c80] - activable => nextflow.secret.LocalSecretsProvider@22101c80
+Sep-27 11:13:43.156 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Sep-27 11:13:44.441 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 from script declaration
+Sep-27 11:13:44.461 [main] DEBUG nextflow.cli.CmdRun - Launching `main.nf` [fervent_mercator] DSL2 - revision: c7ccc752e8
+Sep-27 11:13:44.464 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins declared=[nf-schema@2.0.0]
+Sep-27 11:13:44.465 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Sep-27 11:13:44.465 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[nf-schema@2.0.0]
+Sep-27 11:13:44.467 [main] DEBUG nextflow.plugin.PluginUpdater - Installing plugin nf-schema version: 2.0.0
+Sep-27 11:13:44.477 [main] INFO  org.pf4j.AbstractPluginManager - Plugin 'nf-schema@2.0.0' resolved
+Sep-27 11:13:44.477 [main] INFO  org.pf4j.AbstractPluginManager - Start plugin 'nf-schema@2.0.0'
+Sep-27 11:13:44.483 [main] DEBUG nextflow.plugin.BasePlugin - Plugin started nf-schema@2.0.0
+Sep-27 11:13:44.562 [main] DEBUG nextflow.Session - Session UUID: 6cbafbe9-6d8b-4547-ad61-b2a6fee48aed
+Sep-27 11:13:44.563 [main] DEBUG nextflow.Session - Run name: fervent_mercator
+Sep-27 11:13:44.563 [main] DEBUG nextflow.Session - Executor pool size: 4
+Sep-27 11:13:44.571 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+Sep-27 11:13:44.582 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=12; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+Sep-27 11:13:44.601 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 25.04.7 build 5955
+  Created: 08-09-2025 13:29 UTC 
+  System: Linux 6.11.0-1018-azure
+  Runtime: Groovy 4.0.26 on OpenJDK 64-Bit Server VM 17.0.16+8
+  Encoding: UTF-8 (UTF-8)
+  Process: 3854@runnervm3ublj [10.1.0.182]
+  CPUs: 4 - Mem: 15.6 GB (12.2 GB) - Swap: 4 GB (4 GB)
+Sep-27 11:13:44.623 [main] DEBUG nextflow.Session - Work-dir: /home/runner/work/FastQ-Screen/FastQ-Screen/work [ext2/ext3]
+Sep-27 11:13:44.624 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /home/runner/work/FastQ-Screen/FastQ-Screen/bin
+Sep-27 11:13:44.635 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Sep-27 11:13:44.644 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Sep-27 11:13:44.670 [main] DEBUG nextflow.Session - Observer factory (v2): LinObserverFactory
+Sep-27 11:13:44.697 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+Sep-27 11:13:44.706 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 5; maxThreads: 1000
+Sep-27 11:13:44.756 [main] DEBUG nextflow.Session - Session start
+Sep-27 11:13:44.760 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow started -- trace file: /home/runner/work/FastQ-Screen/FastQ-Screen/results/pipeline_info/execution_trace_2025-09-27_11-13-44.txt
+Sep-27 11:13:45.255 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Sep-27 11:13:45.270 [main] INFO  nextflow.script.BaseScript - FastQ Screen Nextflow Pipeline version 0.16.0

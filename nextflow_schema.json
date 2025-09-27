@@ -1,0 +1,285 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/edmundmiller/FastQ-Screen/master/nextflow_schema.json",
+    "title": "edmundmiller/fastq-screen pipeline parameters",
+    "description": "A tool for multi-genome mapping and quality control",
+    "type": "object",
+    "definitions": {
+        "input_output_options": {
+            "title": "Input/output options",
+            "type": "object",
+            "fa_icon": "fas fa-terminal",
+            "description": "Define where the pipeline should find input data and save output data.",
+            "required": ["input"],
+            "properties": {
+                "input": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/plain",
+                    "pattern": "^\\S+\\.(fastq|fq|fastq\\.gz|fq\\.gz)$",
+                    "description": "Path to FASTQ files (can use glob patterns like '*.fastq.gz')",
+                    "help_text": "Use this to specify the location of your input FASTQ files. For example:\n\n```bash\n--input '*.fastq.gz'\n```",
+                    "fa_icon": "fas fa-file-alt"
+                },
+                "outdir": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
+                    "fa_icon": "fas fa-folder-open",
+                    "default": "./results"
+                }
+            }
+        },
+        "fastq_screen_options": {
+            "title": "FastQ Screen options",
+            "type": "object",
+            "fa_icon": "fas fa-cogs",
+            "description": "Options specific to FastQ Screen analysis",
+            "properties": {
+                "conf": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to FastQ Screen configuration file",
+                    "help_text": "Configuration file containing database paths and aligner settings",
+                    "fa_icon": "fas fa-file-code"
+                },
+                "subset": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Process only a subset of reads for faster analysis",
+                    "help_text": "Specify the number of reads to process from each FASTQ file",
+                    "fa_icon": "fas fa-cut"
+                },
+                "aligner": {
+                    "type": "string",
+                    "enum": ["bowtie", "bowtie2", "bwa", "minimap2"],
+                    "default": "bowtie2",
+                    "description": "Alignment tool to use for mapping",
+                    "help_text": "Choose the alignment tool for mapping reads to reference genomes",
+                    "fa_icon": "fas fa-wrench"
+                },
+                "threads": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "default": 4,
+                    "description": "Number of threads to use for alignment",
+                    "help_text": "Number of CPU threads to use for the alignment step",
+                    "fa_icon": "fas fa-microchip"
+                },
+                "bisulfite": {
+                    "type": "boolean",
+                    "description": "Enable bisulfite mode for methylation analysis",
+                    "help_text": "Use bisulfite-specific alignment settings",
+                    "fa_icon": "fas fa-dna"
+                },
+                "paired": {
+                    "type": "boolean",
+                    "description": "Treat input as paired-end reads",
+                    "help_text": "Enable paired-end read processing",
+                    "fa_icon": "fas fa-link"
+                },
+                "tag": {
+                    "type": "boolean",
+                    "description": "Add genome tags to read headers",
+                    "help_text": "Tag reads with their mapping genome in the output",
+                    "fa_icon": "fas fa-tags"
+                },
+                "nohits": {
+                    "type": "boolean",
+                    "description": "Output reads that didn't map to any genome",
+                    "help_text": "Include unmapped reads in the output",
+                    "fa_icon": "fas fa-times-circle"
+                },
+                "illumina1_3": {
+                    "type": "boolean",
+                    "description": "Use Illumina 1.3+ quality encoding",
+                    "help_text": "Enable for older Illumina quality score format",
+                    "fa_icon": "fas fa-microscope"
+                },
+                "filter": {
+                    "type": "string",
+                    "pattern": "^[012345-]+$",
+                    "description": "Filter reads based on mapping results",
+                    "help_text": "Filter string using digits 0-5 and hyphens to specify which reads to output",
+                    "fa_icon": "fas fa-filter"
+                },
+                "pass": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Minimum mapping quality threshold",
+                    "help_text": "Only output reads with mapping quality above this threshold",
+                    "fa_icon": "fas fa-check-circle"
+                },
+                "inverse": {
+                    "type": "boolean",
+                    "description": "Invert the filter selection",
+                    "help_text": "Output reads that don't match the filter criteria",
+                    "fa_icon": "fas fa-exchange-alt"
+                },
+                "top": {
+                    "type": "string",
+                    "description": "Process only the top portion of reads",
+                    "help_text": "Process only the first N reads or percentage of reads",
+                    "fa_icon": "fas fa-arrow-up"
+                },
+                "get_genomes": {
+                    "type": "boolean",
+                    "description": "Download default genome databases",
+                    "help_text": "Automatically download and configure standard genome databases",
+                    "fa_icon": "fas fa-download"
+                },
+                "add_genome": {
+                    "type": "string",
+                    "description": "Add a custom genome to the analysis",
+                    "help_text": "Path to custom genome for inclusion in the screening",
+                    "fa_icon": "fas fa-plus"
+                }
+            }
+        },
+        "aligner_options": {
+            "title": "Aligner-specific options",
+            "type": "object",
+            "fa_icon": "fas fa-tools",
+            "description": "Options to pass to specific alignment tools",
+            "properties": {
+                "bowtie_opts": {
+                    "type": "string",
+                    "description": "Additional options for Bowtie aligner",
+                    "help_text": "Extra command line options to pass to Bowtie",
+                    "fa_icon": "fas fa-terminal"
+                },
+                "bowtie2_opts": {
+                    "type": "string",
+                    "description": "Additional options for Bowtie2 aligner",
+                    "help_text": "Extra command line options to pass to Bowtie2",
+                    "fa_icon": "fas fa-terminal"
+                },
+                "bismark_opts": {
+                    "type": "string",
+                    "description": "Additional options for Bismark aligner",
+                    "help_text": "Extra command line options to pass to Bismark",
+                    "fa_icon": "fas fa-terminal"
+                },
+                "bwa_opts": {
+                    "type": "string",
+                    "description": "Additional options for BWA aligner",
+                    "help_text": "Extra command line options to pass to BWA",
+                    "fa_icon": "fas fa-terminal"
+                },
+                "minimap2_opts": {
+                    "type": "string",
+                    "description": "Additional options for minimap2 aligner",
+                    "help_text": "Extra command line options to pass to minimap2",
+                    "fa_icon": "fas fa-terminal"
+                }
+            }
+        },
+        "generic_options": {
+            "title": "Generic options",
+            "type": "object",
+            "fa_icon": "fas fa-file-alt",
+            "description": "Less common options for the pipeline, typically set in a config file.",
+            "properties": {
+                "help": {
+                    "type": "boolean",
+                    "description": "Display help text.",
+                    "fa_icon": "fas fa-question-circle",
+                    "hidden": true
+                },
+                "version": {
+                    "type": "boolean",
+                    "description": "Display version and exit.",
+                    "fa_icon": "fas fa-question-circle",
+                    "hidden": true
+                },
+                "validate_params": {
+                    "type": "boolean",
+                    "description": "Boolean whether to validate parameters against the schema at runtime",
+                    "default": true,
+                    "fa_icon": "fas fa-check-square",
+                    "hidden": true
+                },
+                "validationFailUnrecognisedParams": {
+                    "type": "boolean",
+                    "description": "Validation of parameters fails when an unrecognised parameter is found.",
+                    "default": false,
+                    "fa_icon": "far fa-check-circle",
+                    "hidden": true
+                },
+                "validationLenientMode": {
+                    "type": "boolean",
+                    "description": "Validation of parameters in lenient more.",
+                    "default": false,
+                    "fa_icon": "far fa-check-circle",
+                    "hidden": true
+                },
+                "validationSchemaIgnoreParams": {
+                    "type": "string",
+                    "description": "A comma separated string of inputs the schema validation should ignore",
+                    "default": "genomes,modules",
+                    "fa_icon": "far fa-check-circle",
+                    "hidden": true
+                },
+                "validationShowHiddenParams": {
+                    "type": "boolean",
+                    "description": "Show all params when using `--help`",
+                    "default": false,
+                    "fa_icon": "far fa-eye-slash",
+                    "hidden": true
+                }
+            }
+        },
+        "max_job_request_options": {
+            "title": "Max job request options",
+            "type": "object",
+            "fa_icon": "fab fa-acquisitions-incorporated",
+            "description": "Set the top limit for requested resources for any single job.",
+            "help_text": "If you are running on a smaller system, a pipeline step requesting more resources than are available may cause the Nextflow to stop the run with an error. These options allow you to cap the maximum resources requested by any single job so that the pipeline will run on your system.\n\nNote that you can not _increase_ the resources requested by any job using these options. For that you will need your own configuration file. See [the nf-core website](https://nf-co.re/usage/configuration) for details.",
+            "properties": {
+                "max_cpus": {
+                    "type": "integer",
+                    "description": "Maximum number of CPUs that can be requested for any single job.",
+                    "default": 16,
+                    "fa_icon": "fas fa-microchip",
+                    "hidden": true,
+                    "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
+                },
+                "max_memory": {
+                    "type": "string",
+                    "description": "Maximum amount of memory that can be requested for any single job.",
+                    "default": "128.GB",
+                    "fa_icon": "fas fa-memory",
+                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
+                    "hidden": true,
+                    "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
+                },
+                "max_time": {
+                    "type": "string",
+                    "description": "Maximum amount of time that can be requested for any single job.",
+                    "default": "240.h",
+                    "fa_icon": "far fa-clock",
+                    "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
+                    "hidden": true,
+                    "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
+                }
+            }
+        }
+    },
+    "allOf": [
+        {
+            "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/fastq_screen_options"
+        },
+        {
+            "$ref": "#/definitions/aligner_options"
+        },
+        {
+            "$ref": "#/definitions/generic_options"
+        },
+        {
+            "$ref": "#/definitions/max_job_request_options"
+        }
+    ]
+}

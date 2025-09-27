@@ -7,7 +7,7 @@ process MAKE_HTML_REPORT {
 
     input:
     tuple val(meta), path(results)
-    tuple val(meta), path(png), optional: true
+    path png
 
     output:
     tuple val(meta), path("*.html"), emit: html

@@ -1,0 +1,151 @@
+digraph "pipeline_dag_20250927_111443" {
+rankdir=TB;
+v0 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.empty"];
+v28 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="mix"];
+v0 -> v28 [label="ch_versions"];
+
+v1 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.empty"];
+v2 [shape=point];
+v1 -> v2 [label="ch_fastq"];
+
+v3 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.fromPath"];
+v4 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+v3 -> v4;
+
+v4 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="map"];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v4 -> v23 [label="ch_fastq"];
+
+v5 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.empty"];
+v6 [shape=point];
+v5 -> v6 [label="ch_config"];
+
+v7 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.fromPath"];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v7 -> v23 [label="ch_config"];
+
+v8 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v8 -> v23 [label="aligner"];
+
+v9 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v9 -> v23 [label="threads"];
+
+v10 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v10 -> v23 [label="bisulfite"];
+
+v11 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v11 -> v23 [label="tag"];
+
+v12 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v12 -> v23 [label="nohits"];
+
+v13 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v13 -> v23 [label="illumina1_3"];
+
+v14 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v14 -> v23 [label="paired"];
+
+v15 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v15 -> v23 [label="bowtie_opts"];
+
+v16 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v16 -> v23 [label="bowtie2_opts"];
+
+v17 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v17 -> v23 [label="bismark_opts"];
+
+v18 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v18 -> v23 [label="bwa_opts"];
+
+v19 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v19 -> v23 [label="minimap2_opts"];
+
+v20 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v20 -> v23 [label="filter"];
+
+v21 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v21 -> v23 [label="pass"];
+
+v22 [shape=point,label="",fixedsize=true,width=0.1];
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v22 -> v23 [label="inverse"];
+
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v30 [label="EDMUNDMILLER_FASTQSCREEN:MAKE_GRAPHS"];
+v23 -> v30 [label="results"];
+
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v27 [shape=point];
+v23 -> v27;
+
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v26 [shape=point];
+v23 -> v26;
+
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v25 [shape=point];
+v23 -> v25;
+
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v24 [shape=point];
+v23 -> v24 [label="filtered"];
+
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v28 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="mix"];
+v23 -> v28;
+
+v28 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="mix"];
+v31 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="mix"];
+v28 -> v31 [label="ch_versions"];
+
+v29 [shape=point,label="",fixedsize=true,width=0.1];
+v30 [label="EDMUNDMILLER_FASTQSCREEN:MAKE_GRAPHS"];
+v29 -> v30 [label="bisulfite"];
+
+v30 [label="EDMUNDMILLER_FASTQSCREEN:MAKE_GRAPHS"];
+v32 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="ifEmpty"];
+v30 -> v32 [label="png"];
+
+v30 [label="EDMUNDMILLER_FASTQSCREEN:MAKE_GRAPHS"];
+v31 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="mix"];
+v30 -> v31;
+
+v31 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="mix"];
+v35 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="mix"];
+v31 -> v35 [label="ch_versions"];
+
+v32 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="ifEmpty"];
+v33 [label="EDMUNDMILLER_FASTQSCREEN:MAKE_HTML_REPORT"];
+v32 -> v33;
+
+v23 [label="EDMUNDMILLER_FASTQSCREEN:FASTQ_SCREEN_SCREEN"];
+v33 [label="EDMUNDMILLER_FASTQSCREEN:MAKE_HTML_REPORT"];
+v23 -> v33 [label="results"];
+
+v33 [label="EDMUNDMILLER_FASTQSCREEN:MAKE_HTML_REPORT"];
+v34 [shape=point];
+v33 -> v34 [label="html"];
+
+v33 [label="EDMUNDMILLER_FASTQSCREEN:MAKE_HTML_REPORT"];
+v35 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="mix"];
+v33 -> v35;
+
+v35 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="mix"];
+v36 [shape=point];
+v35 -> v36 [label="versions"];
+
+}
