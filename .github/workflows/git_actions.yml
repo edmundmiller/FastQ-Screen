@@ -23,15 +23,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
-      - name: Debug information
-        run: |
-          echo "🚀 GitHub Actions is working!"
-          echo "Runner OS: $RUNNER_OS"
-          echo "Workflow triggered by: ${{ github.event_name }}"
-          echo "Repository: ${{ github.repository }}"
-          echo "Branch: ${{ github.ref }}"
-          echo "Commit SHA: ${{ github.sha }}"
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
