@@ -1,6 +1,10 @@
 name: nf-test CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
   test:
@@ -69,4 +73,4 @@ jobs:
 
       - name: Run Nextflow pipeline test
         run: |
-          nextflow run . -profile test --outdir ./results
+          nextflow run . --input "fastq_screen_test_dataset/*.fastq.gz" --conf ./FastQ_Screen_Genomes/fastq_screen.conf --outdir ./results -profile docker
