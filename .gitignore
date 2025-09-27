@@ -44,3 +44,8 @@ inc/
 work/
 results/
 nextflow
+
+# nf-test artifacts  
+.nf-test/
+.nf-test.log
+nf-test

@@ -1,0 +1,66 @@
+nextflow_pipeline {
+
+    name "Test complete pipeline"
+    script "../main.nf"
+
+    test("Should show help and error message") {
+
+        when {
+            params {
+                help = true
+            }
+        }
+
+        then {
+            assert workflow.success == false  // help exits with code 1
+            assert workflow.stdout.join(' ').contains("No input files specified")
+        }
+
+    }
+
+    test("Should fail gracefully without input") {
+
+        when {
+            params {
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success == false
+            assert workflow.stdout.join(' ').contains("No input files specified")
+        }
+
+    }
+
+    test("Should run with test profile") {
+
+        tag "integration"
+
+        when {
+            params {
+                // Use the test profile which has the input URL and get_genomes = true
+                input = 'https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/fastq_screen_test_dataset.tar.gz'
+                outdir = "results"
+                get_genomes = true
+                subset = 100  // Very small subset for fast testing
+                max_cpus = 2
+                max_memory = '2.GB'
+                max_time = '1.h'
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() >= 1
+            
+            // Check that results were generated
+            with(workflow.out) {
+                assert results != null
+                assert html != null
+            }
+        }
+
+    }
+
+}
