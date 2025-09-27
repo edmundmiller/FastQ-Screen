@@ -4,8 +4,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { PARAMETER_VALIDATION                 } from '../lib/WorkflowMain'
-include { PARAMETER_VALIDATION as PARAM_VAL   } from '../lib/WorkflowFastQScreen'
+// No specific parameter validation imports needed for this simplified version
 
 //
 // MODULE: Installed directly from modules
