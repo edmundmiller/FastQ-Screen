@@ -11,3 +11,4 @@ dependencies:
   - minimap2=2.24
   - samtools=1.16.1
   - bismark=0.24.0
+  - seqtk=1.3
